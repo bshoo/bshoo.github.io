@@ -1,0 +1,166 @@
+/* Import Fonts */
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700|Lora|Playfair+Display:700i,900');
+
+/* CSS Variables for Theming */
+:root {
+    --bg-color: #ffffff;
+    --text-color: rgba(0, 0, 0, 0.84);
+    --text-color-light: rgba(0, 0, 0, 0.54);
+    --accent-color: #000;
+    --border-color: rgba(0, 0, 0, 0.12);
+    --hover-bg-color: rgba(0, 0, 0, 0.05);
+    --header-font: "Playfair Display", serif;
+    --body-font: 'Lora', serif;
+    --meta-font: 'Lato', sans-serif;
+}
+
+[data-theme="dark"] {
+    --bg-color: #121212;
+    --text-color: rgba(255, 255, 255, 0.87);
+    --text-color-light: rgba(255, 255, 255, 0.6);
+    --accent-color: #fff;
+    --border-color: rgba(255, 255, 255, 0.12);
+    --hover-bg-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Base Styles */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--body-font);
+    line-height: 1.7;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 0 25px;
+}
+
+/* Header & Typography */
+header {
+    text-align: center;
+    margin-bottom: 50px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 30px;
+}
+
+h1 {
+    font-family: var(--header-font);
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+h2 {
+    font-family: var(--header-font);
+    font-size: 32px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-top: 40px;
+}
+
+h3 {
+    font-family: var(--meta-font);
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    font-family: var(--meta-font);
+    color: var(--text-color-light);
+    margin: 0 auto;
+    max-width: 600px;
+}
+
+a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 700;
+    transition: opacity 0.3s ease;
+}
+
+a:hover {
+    opacity: 0.7;
+}
+
+/* Sections & Entries */
+.entry {
+    margin-bottom: 25px;
+}
+
+.meta {
+    font-family: var(--meta-font);
+    color: var(--text-color-light);
+    font-size: 15px;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 8px;
+}
+
+footer {
+    text-align: center;
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-color-light);
+    font-family: var(--meta-font);
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background-color: var(--hover-bg-color);
+}
+
+.theme-toggle .icon {
+    stroke: var(--text-color);
+}
+
+.icon-sun { display: none; }
+.icon-moon { display: block; }
+[data-theme="dark"] .icon-sun { display: block; }
+[data-theme="dark"] .icon-moon { display: none; }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        margin-top: 20px;
+        padding: 0 15px;
+    }
+    h1 {
+        font-size: 36px;
+    }
+    h2 {
+        font-size: 28px;
+    }
+    .theme-toggle {
+        top: 15px;
+        right: 15px;
+    }
+}
+
