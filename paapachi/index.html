@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Calendar</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f6f7f9;
+    }
+    .calendar {
+      background: white;
+      padding: 2rem 3rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .date {
+      font-size: 2rem;
+      font-weight: 600;
+    }
+    .day {
+      margin-top: 0.5rem;
+      font-size: 1.2rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="calendar">
+    <div class="date" id="date"></div>
+    <div class="day" id="day"></div>
+  </div>
+
+  <script>
+    const now = new Date();
+
+    const dateFormatter = new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    });
+
+    const dayFormatter = new Intl.DateTimeFormat("en-US", {
+      weekday: "long"
+    });
+
+    document.getElementById("date").textContent = dateFormatter.format(now);
+    document.getElementById("day").textContent = dayFormatter.format(now);
+  </script>
+</body>
+</html>
+
