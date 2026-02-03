@@ -1,57 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Calendar</title>
-  <style>
-    body {
-      font-family: system-ui, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: #f6f7f9;
-    }
-    .calendar {
-      background: white;
-      padding: 2rem 3rem;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-    .date {
-      font-size: 2rem;
-      font-weight: 600;
-    }
-    .day {
-      margin-top: 0.5rem;
-      font-size: 1.2rem;
-      color: #666;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Until I See You</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="calendar">
-    <div class="date" id="date"></div>
-    <div class="day" id="day"></div>
-  </div>
-
-  <script>
-    const now = new Date();
-
-    const dateFormatter = new Intl.DateTimeFormat("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric"
-    });
-
-    const dayFormatter = new Intl.DateTimeFormat("en-US", {
-      weekday: "long"
-    });
-
-    document.getElementById("date").textContent = dateFormatter.format(now);
-    document.getElementById("day").textContent = dayFormatter.format(now);
-  </script>
+    <!-- Background container for image transitions -->
+    <div id="background-container">
+        <div id="background-current" class="background-layer"></div>
+        <div id="background-next" class="background-layer"></div>
+    </div>
+    
+    <!-- Countdown container -->
+    <div id="countdown-container" class="fade-in">
+        <div class="countdown-grid">
+            <div class="time-block">
+                <div class="time-value" id="days">00</div>
+                <div class="time-label">days</div>
+            </div>
+            
+            <div class="time-block">
+                <div class="time-value" id="hours">00</div>
+                <div class="time-label">hours</div>
+            </div>
+            
+            <div class="time-block">
+                <div class="time-value" id="minutes">00</div>
+                <div class="time-label">minutes</div>
+            </div>
+            
+            <div class="time-block">
+                <div class="time-value" id="seconds">00</div>
+                <div class="time-label">seconds</div>
+            </div>
+        </div>
+        
+        <div class="message" id="message">until I see you</div>
+    </div>
+    
+    <script src="script.js"></script>
 </body>
 </html>
-
