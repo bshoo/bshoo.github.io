@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Until I See You</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background container for image transitions -->
+    <div id="background-container">
+        <div id="background-current" class="background-layer"></div>
+        <div id="background-next" class="background-layer"></div>
+    </div>
+    
+    <!-- Countdown container -->
+    <div id="countdown-container" class="fade-in">
+        <div class="countdown-grid">
+            <div class="time-block">
+                <div class="time-value" id="days">00</div>
+                <div class="time-label">days</div>
+            </div>
+            
+            <div class="time-block">
+                <div class="time-value" id="hours">00</div>
+                <div class="time-label">hours</div>
+            </div>
+            
+            <div class="time-block">
+                <div class="time-value" id="minutes">00</div>
+                <div class="time-label">minutes</div>
+            </div>
+            
+            <div class="time-block">
+                <div class="time-value" id="seconds">00</div>
+                <div class="time-label">seconds</div>
+            </div>
+        </div>
+        
+        <div class="message" id="message">until I see you</div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
