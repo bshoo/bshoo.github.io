@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Debug Helper</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .info {
+            background: #2a2a2a;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+        .error {
+            background: #4a2020;
+            border: 1px solid #ff4444;
+        }
+        .success {
+            background: #204a20;
+            border: 1px solid #44ff44;
+        }
+        img {
+            max-width: 300px;
+            margin: 10px 0;
+            border: 2px solid #444;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Loading Debug Helper</h1>
+    
+    <div class="info">
+        <h3>Reference Date:</h3>
+        <p id="refDate"></p>
+    </div>
+    
+    <div class="info">
+        <h3>Today's Date:</h3>
+        <p id="today"></p>
+    </div>
+    
+    <div class="info">
+        <h3>Day Offset:</h3>
+        <p id="offset"></p>
+    </div>
+    
+    <div class="info">
+        <h3>Expected Image Path:</h3>
+        <p id="imagePath"></p>
+    </div>
+    
+    <div id="testResult" class="info">
+        <h3>Image Test Result:</h3>
+        <p id="result">Testing...</p>
+        <div id="imagePreview"></div>
+    </div>
+    
+    <div class="info">
+        <h3>Instructions:</h3>
+        <ol>
+            <li>Make sure you have an <code>images/</code> folder in the same directory as this HTML file</li>
+            <li>The image should be named exactly as shown in "Expected Image Path" above</li>
+            <li>Common issues:
+                <ul>
+                    <li>Wrong file extension (should be .jpg)</li>
+                    <li>Wrong naming (should be day-0.jpg, day-1.jpg, etc.)</li>
+                    <li>File in wrong location (should be in images/ folder)</li>
+                    <li>Case sensitivity on some servers (use lowercase)</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <script>
+        const REFERENCE_DATE = new Date('2026-02-03');
+        const IMAGE_FOLDER = 'images/';
+        
+        function getDayOffset() {
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const reference = new Date(
+                REFERENCE_DATE.getFullYear(),
+                REFERENCE_DATE.getMonth(),
+                REFERENCE_DATE.getDate()
+            );
+            
+            const diffTime = today - reference;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            return diffDays;
+        }
+        
+        function getImageFilename(offset) {
+            return `${IMAGE_FOLDER}day-${offset}.jpg`;
+        }
+        
+        // Display info
+        document.getElementById('refDate').textContent = REFERENCE_DATE.toDateString();
+        document.getElementById('today').textContent = new Date().toDateString();
+        
+        const offset = getDayOffset();
+        document.getElementById('offset').textContent = offset;
+        
+        const imagePath = getImageFilename(offset);
+        document.getElementById('imagePath').textContent = imagePath;
+        
+        // Test image loading
+        const img = new Image();
+        const resultDiv = document.getElementById('testResult');
+        const resultText = document.getElementById('result');
+        const previewDiv = document.getElementById('imagePreview');
+        
+        img.onload = () => {
+            resultDiv.classList.add('success');
+            resultText.textContent = '✓ Image loaded successfully!';
+            previewDiv.innerHTML = `<img src="${imagePath}" alt="Preview">`;
+        };
+        
+        img.onerror = () => {
+            resultDiv.classList.add('error');
+            resultText.innerHTML = `✗ Failed to load image!<br><br>
+                Please check:<br>
+                1. File exists at path: ${imagePath}<br>
+                2. File extension is .jpg (lowercase)<br>
+                3. Filename is exactly: day-${offset}.jpg<br>
+                4. File is in the images/ folder`;
+        };
+        
+        img.src = imagePath;
+    </script>
+</body>
+</html>

@@ -18,12 +18,13 @@
     --accent-glow: rgba(255, 255, 255, 0.3);
     
     /* Typography */
-    --font-serif: 'Cormorant Garamond', serif;
-    --font-sans: 'Inter', sans-serif;
+    --font-numbers: 'Cormorant Garamond', serif;
+    --font-elegant: 'Cinzel', serif;
+    --font-message: 'Crimson Text', serif;
 }
 
 body {
-    font-family: var(--font-sans);
+    font-family: var(--font-elegant);
     color: var(--text-primary);
     overflow: hidden;
     height: 100vh;
@@ -74,6 +75,7 @@ body::before {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    background-color: #0a0a0a;
     transition: opacity 2s ease-in-out;
 }
 
@@ -87,7 +89,7 @@ body::before {
     z-index: 2;
 }
 
-/* Dark overlay removed - let the beautiful image show! */
+/* Dark overlay for readability - very subtle */
 .background-layer::after {
     content: '';
     position: absolute;
@@ -95,9 +97,11 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: none;
-    /* Optional: add a very subtle vignette only at edges if needed for text readability */
-    /* background: radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.1) 100%); */
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.15) 0%,
+        rgba(0, 0, 0, 0.25) 100%
+    );
 }
 
 /* ============================================
@@ -181,8 +185,8 @@ body::before {
     justify-content: center;
     align-items: center;
     gap: 1.5rem;
-    margin-bottom: 1.75rem;
-    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+    flex-wrap: nowrap;
 }
 
 .time-block {
@@ -209,7 +213,7 @@ body::before {
 
 /* Add subtle glow to numbers */
 .time-value {
-    font-family: var(--font-serif);
+    font-family: var(--font-numbers);
     font-size: 3.5rem;
     font-weight: 300;
     line-height: 1;
@@ -233,11 +237,11 @@ body::before {
 }
 
 .time-label {
-    font-family: var(--font-sans);
-    font-size: 0.75rem;
+    font-family: var(--font-elegant);
+    font-size: 0.8rem;
     font-weight: 300;
     text-transform: lowercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.2em;
     color: var(--text-secondary);
     opacity: 0.95;
     text-shadow: 
@@ -246,14 +250,35 @@ body::before {
 }
 
 /* ============================================
+   Secondary Countdown (Weekdays)
+   ============================================ */
+.secondary-countdown {
+    font-family: var(--font-elegant);
+    font-size: 0.85rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 1.5rem;
+    text-align: center;
+    text-shadow: 
+        0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.secondary-countdown span {
+    font-family: var(--font-numbers);
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+/* ============================================
    Message
    ============================================ */
 .message {
-    font-family: var(--font-serif);
-    font-size: 1.75rem;
+    font-family: var(--font-message);
+    font-size: 1.85rem;
     font-weight: 300;
     font-style: italic;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.03em;
     color: var(--text-primary);
     padding-top: 1.25rem;
     margin-top: 1.25rem;
@@ -342,24 +367,24 @@ body::before {
     }
     
     .countdown-grid {
-        gap: 1.25rem;
+        gap: 1rem;
     }
     
     .time-block {
-        padding: 0 0.75rem;
+        padding: 0 0.5rem;
     }
     
     .time-block:not(:last-child)::after {
-        right: -0.625rem;
+        right: -0.5rem;
         font-size: 1.25rem;
     }
     
     .time-value {
-        font-size: 2.75rem;
+        font-size: 2.5rem;
     }
     
     .time-label {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
     }
     
     .message {
@@ -374,24 +399,25 @@ body::before {
     }
     
     .countdown-grid {
-        gap: 1rem;
+        gap: 0.5rem;
     }
     
     .time-block {
-        padding: 0 0.5rem;
+        padding: 0 0.25rem;
     }
     
     .time-block:not(:last-child)::after {
-        right: -0.5rem;
+        right: -0.25rem;
         font-size: 1rem;
     }
     
     .time-value {
-        font-size: 2.25rem;
+        font-size: 1.85rem;
     }
     
     .time-label {
-        font-size: 0.65rem;
+        font-size: 0.55rem;
+        letter-spacing: 0.1em;
     }
     
     .message {
@@ -406,14 +432,47 @@ body::before {
     }
 }
 
+/* Extra small phones - ensure everything stays on one line */
+@media (max-width: 360px) {
+    .countdown-grid {
+        gap: 0.35rem;
+    }
+    
+    .time-block {
+        padding: 0 0.15rem;
+    }
+    
+    .time-block:not(:last-child)::after {
+        right: -0.175rem;
+        font-size: 0.85rem;
+    }
+    
+    .time-value {
+        font-size: 1.5rem;
+    }
+    
+    .time-label {
+        font-size: 0.5rem;
+        letter-spacing: 0.08em;
+    }
+    
+    .message {
+        font-size: 1rem;
+    }
+    
+    .secondary-countdown {
+        font-size: 0.75rem;
+    }
+}
+
 /* ============================================
    Special States
    ============================================ */
 .finished .message {
     font-size: 2.5rem;
-    font-family: var(--font-serif);
+    font-family: var(--font-message);
     font-style: italic;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.08em;
     animation: fadeIn 2s ease-out;
     text-shadow: 
         0 4px 8px rgba(0, 0, 0, 0.9),
