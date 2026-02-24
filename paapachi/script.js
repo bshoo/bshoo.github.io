@@ -124,7 +124,7 @@ function updateCountdown() {
         secondsEl.textContent = '00';
         weekdaysEl.textContent = '0';
         
-        messageEl.textContent = "I'm here.";
+        messageEl.textContent = "You're here!";
         containerEl.classList.add('finished');
         
         return;
