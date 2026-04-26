@@ -2,225 +2,185 @@
    CONFIGURATION
    ============================================ */
 
-// Target countdown date - CHANGE YEAR HERE
-const TARGET_YEAR = 2026;
-const TARGET_MONTH = 2; // February (1-12)
-const TARGET_DAY = 24;
-const TARGET_HOUR = 20; // 8 PM in 24-hour format
-const TARGET_MINUTE = 45;
-
-// Background image configuration - only uses fallback now
-const FALLBACK_IMAGE = 'images/fallback.jpg';
+// Image base names — tries jpg, jpeg, png, webp in order
+const IMAGES = ['b1', 'b2', 'b3', 'b4'];
+const IMAGE_FORMATS = ['jpg', 'jpeg', 'png', 'webp'];
+const IMAGE_FOLDER = 'images/';
 
 /* ============================================
-   STATE MANAGEMENT
+   IMAGE LOADING — tries multiple formats
    ============================================ */
 
-let countdownInterval = null;
-let isCountdownFinished = false;
+function loadImageWithFallback(baseName, elementId) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
 
-/* ============================================
-   COUNTDOWN LOGIC
-   ============================================ */
+    let formatIndex = 0;
 
-/**
- * Calculate the target date in the user's local timezone
- */
-function getTargetDate() {
-    return new Date(
-        TARGET_YEAR,
-        TARGET_MONTH - 1, // JavaScript months are 0-indexed
-        TARGET_DAY,
-        TARGET_HOUR,
-        TARGET_MINUTE,
-        0,
-        0
-    );
-}
-
-/**
- * Calculate the number of Sundays between now and target date
- */
-function countSundaysUntilTarget() {
-    const now = new Date();
-    const target = getTargetDate();
-    
-    let sundayCount = 0;
-    let currentDate = new Date(now);
-    currentDate.setHours(0, 0, 0, 0);
-    
-    while (currentDate < target) {
-        if (currentDate.getDay() === 0) { // Sunday is 0
-            sundayCount++;
+    function tryNext() {
+        if (formatIndex >= IMAGE_FORMATS.length) {
+            console.warn(`Could not load any format for: ${baseName}`);
+            return;
         }
-        currentDate.setDate(currentDate.getDate() + 1);
-    }
-    
-    return sundayCount;
-}
 
-/**
- * Calculate time remaining until target date
- */
-function calculateTimeRemaining() {
-    const now = new Date();
-    const target = getTargetDate();
-    const diff = target - now;
-    
-    if (diff <= 0) {
-        return {
-            total: 0,
-            days: 0,
-            hours: 0,
-            minutes: 0,
-            seconds: 0,
-            weekdays: 0
-        };
-    }
-    
-    const seconds = Math.floor((diff / 1000) % 60);
-    const minutes = Math.floor((diff / 1000 / 60) % 60);
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    
-    // Calculate weekdays (days minus Sundays)
-    const sundays = countSundaysUntilTarget();
-    const weekdays = days - sundays;
-    
-    return {
-        total: diff,
-        days,
-        hours,
-        minutes,
-        seconds,
-        weekdays
-    };
-}
-
-/**
- * Update the countdown display
- */
-function updateCountdown() {
-    const time = calculateTimeRemaining();
-    
-    // Get DOM elements
-    const daysEl = document.getElementById('days');
-    const hoursEl = document.getElementById('hours');
-    const minutesEl = document.getElementById('minutes');
-    const secondsEl = document.getElementById('seconds');
-    const weekdaysEl = document.getElementById('weekdays-remaining');
-    const messageEl = document.getElementById('message');
-    const containerEl = document.getElementById('countdown-container');
-    
-    // Check if countdown has finished
-    if (time.total <= 0 && !isCountdownFinished) {
-        isCountdownFinished = true;
-        clearInterval(countdownInterval);
-        
-        // Update display to show completion
-        daysEl.textContent = '00';
-        hoursEl.textContent = '00';
-        minutesEl.textContent = '00';
-        secondsEl.textContent = '00';
-        weekdaysEl.textContent = '0';
-        
-        messageEl.textContent = "You're here!";
-        containerEl.classList.add('finished');
-        
-        return;
-    }
-    
-    // Update countdown values with padding
-    daysEl.textContent = String(time.days).padStart(2, '0');
-    hoursEl.textContent = String(time.hours).padStart(2, '0');
-    minutesEl.textContent = String(time.minutes).padStart(2, '0');
-    weekdaysEl.textContent = time.weekdays;
-    
-    // Update seconds with animation
-    const newSeconds = String(time.seconds).padStart(2, '0');
-    if (secondsEl.textContent !== newSeconds) {
-        secondsEl.textContent = newSeconds;
-        secondsEl.classList.remove('pulse');
-        // Trigger reflow to restart animation
-        void secondsEl.offsetWidth;
-        secondsEl.classList.add('pulse');
-    }
-}
-
-/**
- * Initialize and start the countdown
- */
-function initCountdown() {
-    updateCountdown();
-    countdownInterval = setInterval(updateCountdown, 1000);
-}
-
-/* ============================================
-   BACKGROUND IMAGE SYSTEM
-   ============================================ */
-
-/**
- * Load an image and return a promise
- */
-function loadImage(src) {
-    return new Promise((resolve, reject) => {
+        const src = `${IMAGE_FOLDER}${baseName}.${IMAGE_FORMATS[formatIndex]}`;
         const img = new Image();
-        img.onload = () => resolve(src);
-        img.onerror = () => reject(new Error(`Failed to load image: ${src}`));
+
+        img.onload = () => {
+            el.style.backgroundImage = `url('${src}')`;
+            console.log(`✓ Loaded: ${src}`);
+        };
+
+        img.onerror = () => {
+            console.log(`✗ Failed: ${src}`);
+            formatIndex++;
+            tryNext();
+        };
+
         img.src = src;
+    }
+
+    tryNext();
+}
+
+function initImages() {
+    IMAGES.forEach((name, i) => {
+        loadImageWithFallback(name, `photo-${i + 1}`);
     });
 }
 
-/**
- * Set static background image (fallback only)
- */
-async function setBackgroundImage() {
-    const currentLayer = document.getElementById('background-current');
-    
-    // Try multiple formats for the fallback image
-    const formats = ['jpg', 'jpeg', 'png', 'webp'];
-    const basePath = 'images/fallback';
-    
-    for (const format of formats) {
-        const imagePath = `${basePath}.${format}`;
-        try {
-            await loadImage(imagePath);
-            currentLayer.style.backgroundImage = `url('${imagePath}')`;
-            console.log(`✓ Background image loaded: ${imagePath}`);
-            return;
-        } catch (error) {
-            console.log(`✗ Failed to load: ${imagePath}`);
-        }
-    }
-    
-    console.error('Failed to load background image in any format');
+/* ============================================
+   CONFETTI
+   ============================================ */
+
+const canvas  = document.getElementById('confetti-canvas');
+const ctx     = canvas.getContext('2d');
+
+let pieces    = [];
+let animFrame = null;
+let running   = false;
+
+// Palette — warm, celebratory, not garish
+const COLORS = [
+    '#f9e4b7', '#f7c59f', '#e8a598', '#c9ada7',
+    '#d4b8c7', '#b5ead7', '#ffdac1', '#e2f0cb',
+    '#ffffff', '#ffeaa7'
+];
+
+function resizeCanvas() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
 }
 
-/**
- * Initialize background image system
- */
-function initBackground() {
-    setBackgroundImage();
+function randomBetween(a, b) {
+    return a + Math.random() * (b - a);
+}
+
+function createPiece() {
+    return {
+        x:       randomBetween(0, canvas.width),
+        y:       randomBetween(-40, -10),
+        w:       randomBetween(6, 12),
+        h:       randomBetween(10, 18),
+        color:   COLORS[Math.floor(Math.random() * COLORS.length)],
+        angle:   randomBetween(0, Math.PI * 2),
+        spin:    randomBetween(-0.08, 0.08),
+        vx:      randomBetween(-1.2, 1.2),
+        vy:      randomBetween(2.5, 5),
+        opacity: randomBetween(0.75, 1),
+    };
+}
+
+function spawnBurst(count) {
+    for (let i = 0; i < count; i++) {
+        pieces.push(createPiece());
+    }
+}
+
+function drawPieces() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    pieces.forEach(p => {
+        ctx.save();
+        ctx.globalAlpha = p.opacity;
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.angle);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        ctx.restore();
+    });
+}
+
+function updatePieces() {
+    pieces.forEach(p => {
+        p.x     += p.vx;
+        p.y     += p.vy;
+        p.angle += p.spin;
+        p.vy    += 0.06; // gentle gravity
+        p.opacity -= 0.003;
+    });
+
+    // Remove pieces that have fallen off screen or faded out
+    pieces = pieces.filter(p => p.y < canvas.height + 30 && p.opacity > 0);
+}
+
+function animate() {
+    if (!running) return;
+    drawPieces();
+    updatePieces();
+    animFrame = requestAnimationFrame(animate);
+}
+
+function stopConfetti() {
+    running = false;
+    cancelAnimationFrame(animFrame);
+    // Fade out the remaining pieces over ~1s then clear
+    setTimeout(() => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        pieces = [];
+    }, 1200);
+}
+
+function launchConfetti() {
+    resizeCanvas();
+    running = true;
+
+    // Initial big burst
+    spawnBurst(180);
+
+    // A few follow-up waves to keep it lively
+    setTimeout(() => spawnBurst(120), 250);
+    setTimeout(() => spawnBurst(80),  600);
+
+    animate();
+
+    // Stop spawning after ~2.5s, let pieces fall naturally
+    setTimeout(stopConfetti, 2500);
 }
 
 /* ============================================
-   INITIALIZATION
+   REVEAL SEQUENCE
    ============================================ */
 
-/**
- * Initialize the application when DOM is ready
- */
-document.addEventListener('DOMContentLoaded', () => {
-    initBackground();
-    initCountdown();
-});
+function revealBirthdayBox() {
+    const box = document.getElementById('birthday-container');
+    box.classList.add('visible');
+}
 
-/**
- * Handle page visibility changes
- * Re-sync countdown when user returns to the tab
- */
-document.addEventListener('visibilitychange', () => {
-    if (!document.hidden && !isCountdownFinished) {
-        updateCountdown();
-    }
-});
+function init() {
+    initImages();
+
+    // 1s after load: confetti + reveal birthday box together
+    setTimeout(() => {
+        launchConfetti();
+        revealBirthdayBox();
+    }, 1000);
+}
+
+/* ============================================
+   BOOT
+   ============================================ */
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+document.addEventListener('DOMContentLoaded', init);

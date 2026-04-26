@@ -3,54 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Until I See You</title>
-    
+    <title>Happy Birthday</title>
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Cinzel:wght@300;400&family=Crimson+Text:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Cinzel:wght@300;400&family=Crimson+Text:ital,wght@0,300;1,300;1,400&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Background container for image transitions -->
-    <div id="background-container">
-        <div id="background-current" class="background-layer"></div>
-        <div id="background-next" class="background-layer"></div>
+
+    <!-- Confetti canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- 2x2 photo grid — the entire background -->
+    <div id="photo-grid">
+        <div class="photo-cell" id="photo-1"></div>
+        <div class="photo-cell" id="photo-2"></div>
+        <div class="photo-cell" id="photo-3"></div>
+        <div class="photo-cell" id="photo-4"></div>
     </div>
-    
-    <!-- Countdown container -->
-    <div id="countdown-container" class="fade-in">
-        <div class="countdown-grid">
-            <div class="time-block">
-                <div class="time-value" id="days">00</div>
-                <div class="time-label">days</div>
-            </div>
-            
-            <div class="time-block">
-                <div class="time-value" id="hours">00</div>
-                <div class="time-label">hours</div>
-            </div>
-            
-            <div class="time-block">
-                <div class="time-value" id="minutes">00</div>
-                <div class="time-label">minutes</div>
-            </div>
-            
-            <div class="time-block">
-                <div class="time-value" id="seconds">00</div>
-                <div class="time-label">seconds</div>
-            </div>
-        </div>
-        
-        <!-- Secondary countdown excluding Sundays -->
-        <div class="secondary-countdown">
-            (<span id="weekdays-remaining">0</span> days actually)
-        </div>
-        
-        <div class="message" id="message">until I see you</div>
+
+    <!-- Birthday wishes — hidden until confetti fires -->
+    <div id="birthday-container">
+        <h2 class="birthday-heading">Happy Birthday Paapachi</h2>
+        <p class="birthday-text">Thank you. I am grateful for your existence; I am thankful to the forces of nature, of Providence that brought us here, at the right time, to enjoy each other’s company. It is an incredible privilege to be able to participate in this celebration of your existence, and to be with you, to contribute to your smiles, to have you in my life, and this whole journey, and whatever is to come, it is all a blessing, beyond my worth. Happy Birthday, My Dearest! May all your dreams come true, may the worst of your days dissolve into thin air and the best of them shine on through.</p>
     </div>
-    
+
     <script src="script.js"></script>
 </body>
 </html>
